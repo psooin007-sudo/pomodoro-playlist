@@ -1,0 +1,27 @@
+/* Subtle hand-drawn line effect for borders */
+.hand-drawn-border {
+  position: relative;
+  border: 1.5px solid transparent;
+}
+
+.hand-drawn-border::before {
+  content: '';
+  position: absolute;
+  top: -1.5px;
+  left: -1.5px;
+  right: -1.5px;
+  bottom: -1.5px;
+  border: 1.5px solid black;
+  pointer-events: none;
+  
+  /* Subtle hand-drawn effect using filter */
+  filter: url(#hand-drawn-filter);
+}
+
+/* SVG filter for subtle hand-drawn line effect */
+svg#hand-drawn-svg {
+  position: absolute;
+  width: 0;
+  height: 0;
+  visibility: hidden;
+}

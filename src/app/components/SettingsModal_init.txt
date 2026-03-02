@@ -1,0 +1,111 @@
+import { useState } from "react";
+import { X } from "lucide-react";
+
+interface SettingsModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
+  const [autoStartNext, setAutoStartNext] = useState(true);
+  const [includeLongBreak, setIncludeLongBreak] = useState(true);
+  const [workMinutes, setWorkMinutes] = useState(25);
+  const [breakMinutes, setBreakMinutes] = useState(5);
+  const [longBreakMinutes, setLongBreakMinutes] = useState(15);
+  const [focusCount, setFocusCount] = useState(4);
+  const [sound, setSound] = useState<"Bell" | "Soft Tone" | "Mute">("Bell");
+
+  if (!isOpen) return null;
+
+  const handleSave = () => {
+    // Save settings logic here
+    onClose();
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+      <div 
+        className="bg-white w-full max-w-[390px] rounded-2xl p-6 max-h-[85vh] overflow-y-auto shadow-xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl">Settings</h2>
+          <button 
+            onClick={onClose}
+            className="p-2 -mr-2 hover:bg-black/5 rounded-full transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <div className="space-y-6">
+          {/* Auto Start Next Track */}
+          <div className="flex items-center justify-between py-2">
+            <label className="text-sm text-black/80">Auto Start Next Track</label>
+            <button
+              onClick={() => setAutoStartNext(!autoStartNext)}
+              className={`hand-drawn-border w-14 h-8 relative transition-colors ${
+                autoStartNext ? "bg-black" : "bg-white"
+              }`}
+            >
+              <div
+                className={`absolute top-1 w-5 h-5 bg-white transition-all ${
+                  autoStartNext ? "right-1" : "left-1"
+                }`}
+              />
+            </button>
+          </div>
+
+          {/* Include Long Break */}
+          <div className="flex items-center justify-between py-2">
+            <label className="text-sm text-black/80">Include Long Break</label>
+            <button
+              onClick={() => setIncludeLongBreak(!includeLongBreak)}
+              className={`hand-drawn-border w-14 h-8 relative transition-colors ${
+                includeLongBreak ? "bg-black" : "bg-white"
+              }`}
+            >
+              <div
+                className={`absolute top-1 w-5 h-5 bg-white transition-all ${
+                  includeLongBreak ? "right-1" : "left-1"
+                }`}
+              />
+            </button>
+          </div>
+
+          {/* Divider */}
+          <div className="border-t border-black/10 my-6" />
+
+          {/* Sound Options */}
+          <div>
+            <h3 className="text-xs text-black/40 tracking-wider mb-3">SOUND</h3>
+            <div className="space-y-2">
+              {(["Bell", "Soft Tone", "Mute"] as const).map((option) => (
+                <button
+                  key={option}
+                  onClick={() => setSound(option)}
+                  className={`hand-drawn-border w-full px-4 py-3 text-left transition-colors ${
+                    sound === option 
+                      ? "bg-black text-white" 
+                      : "bg-white hover:bg-black/5"
+                  }`}
+                >
+                  {option}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Save Button */}
+          <button 
+            onClick={handleSave}
+            className="hand-drawn-border bg-black text-white w-full px-8 py-4 hover:bg-black/90 transition-colors mt-6"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
