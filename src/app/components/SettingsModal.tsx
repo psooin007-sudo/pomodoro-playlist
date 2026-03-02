@@ -31,7 +31,7 @@ export function playSoftTone() {
   osc.stop(ctx.currentTime + 2);
 }
 
-// 📳 바이브레이션 — 모바일만 지원, PC는 자동 무시
+// 📳 바이브레이션 — 안드로이드만 지원
 export function vibrate() {
   if ("vibrate" in navigator) {
     navigator.vibrate([200, 100, 200]);
@@ -58,6 +58,10 @@ interface SettingsModalProps {
   initialSettings?: Settings;
   onSave: (settings: Settings) => void;
 }
+
+// 안드로이드 여부 체크
+const supportsVibration =
+  "vibrate" in navigator && /Android/i.test(navigator.userAgent);
 
 function Toggle({
   value,
@@ -139,11 +143,19 @@ export function SettingsModal({
             <Toggle value={autoStartNext} onChange={setAutoStartNext} />
           </div>
 
-          {/* Vibration — 진동 지원 기기에서만 표시 */}
-          {"vibrate" in navigator && (
-            <div className="flex items-center justify-between py-2">
-              <label className="text-sm text-black/80">Vibration</label>
-              <Toggle value={vibration} onChange={setVibration} />
+          {/* Vibration — 안드로이드만 표시 */}
+          {supportsVibration && (
+            <div>
+              <div className="flex items-center justify-between py-2">
+                <label className="text-sm text-black/80">Vibration</label>
+                <Toggle value={vibration} onChange={setVibration} />
+              </div>
+              <p
+                className="text-xs text-black/30 mt-1"
+                style={{ fontFamily: "'Nanum Pen Script', cursive" }}
+              >
+                무음 모드에서는 진동이 작동하지 않을 수 있어요
+              </p>
             </div>
           )}
 
@@ -167,7 +179,12 @@ export function SettingsModal({
                 </button>
               ))}
             </div>
-            <p className="text-xs text-black/30 mt-2">탭하면 미리 들을 수 있어요</p>
+            <p
+              className="text-xs text-black/30 mt-2"
+              style={{ fontFamily: "'Nanum Pen Script', cursive" }}
+            >
+              탭하면 미리 들을 수 있어요
+            </p>
           </div>
 
           {/* Save */}
