@@ -183,6 +183,7 @@ export function NowPlaying() {
     // 마지막 트랙
     if (!isLooping) {
       setIsPlaying(false);
+      navigate("/playlists");
       return;
     }
 
