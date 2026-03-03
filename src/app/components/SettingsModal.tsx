@@ -120,80 +120,82 @@ export function SettingsModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-12 bg-white/80 backdrop-blur-md">
       <div
-        className="bg-white w-full max-w-[390px] rounded-2xl p-6 max-h-[85vh] overflow-y-auto shadow-xl"
+        className="relative w-full max-w-[300px]"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl">Settings</h2>
-          <button
-            onClick={onClose}
-            className="p-2 -mr-2 hover:bg-black/5 rounded-full transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
+        {/* 테두리 사진 */}
+        <img
+          src="/pomodoro_imgs/page_outline.webp"
+          alt="modal border"
+          className="w-full h-auto scale-x-[1.1] scale-y-[1.2] origin-top translate-y-[5%]"
+        />
 
-        <div className="space-y-6">
-          {/* Auto Start Next Track */}
-          <div className="flex items-center justify-between py-2">
-            <label className="text-sm text-black/80">Auto Start Next Track</label>
-            <Toggle value={autoStartNext} onChange={setAutoStartNext} />
+        {/* 내용 */}
+        <div
+          className="absolute inset-x-0 top-0 flex flex-col px-6 py-15"
+          style={{ height: "120%", zoom: 0.75 }}
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl">Settings</h2>
+            <button onClick={onClose} className="p-2 -mr-2 hover:bg-black/5 rounded-full transition-colors">
+              <X className="w-5 h-5" />
+            </button>
           </div>
 
-          {/* Vibration — 안드로이드만 표시 */}
-          {supportsVibration && (
-            <div>
-              <div className="flex items-center justify-between py-2">
-                <label className="text-sm text-black/80">Vibration</label>
-                <Toggle value={vibration} onChange={setVibration} />
+          <div className="space-y-6">
+            {/* Auto Start Next Track */}
+            <div className="flex items-center justify-between py-2">
+              <label className="text-sm text-black/80">Auto Start Next Track</label>
+              <Toggle value={autoStartNext} onChange={setAutoStartNext} />
+            </div>
+
+            {/* Vibration */}
+            {supportsVibration && (
+              <div>
+                <div className="flex items-center justify-between py-2">
+                  <label className="text-sm text-black/80">Vibration</label>
+                  <Toggle value={vibration} onChange={setVibration} />
+                </div>
+                <p className="text-xs text-black/30 mt-1" style={{ fontFamily: "'Nanum Pen Script', cursive" }}>
+                  무음 모드에서는 진동이 작동하지 않을 수 있어요
+                </p>
               </div>
-              <p
-                className="text-xs text-black/30 mt-1"
-                style={{ fontFamily: "'Nanum Pen Script', cursive" }}
-              >
-                무음 모드에서는 진동이 작동하지 않을 수 있어요
+            )}
+
+            <div className="border-t border-black/10" />
+
+            {/* Sound Options */}
+            <div>
+              <h3 className="text-xs text-black/40 tracking-wider mb-3">SOUND</h3>
+              <div className="space-y-2">
+                {(["Bell", "Soft Tone", "Mute"] as const).map((option) => (
+                  <button
+                    key={option}
+                    onClick={() => handlePreview(option)}
+                    className={`hand-drawn-border w-full px-4 py-3 text-left transition-colors ${
+                      sound === option ? "bg-black text-white" : "bg-white hover:bg-black/5"
+                    }`}
+                  >
+                    {option}
+                  </button>
+                ))}
+              </div>
+              <p className="text-xs text-black/30 mt-2" style={{ fontFamily: "'Nanum Pen Script', cursive" }}>
+                탭하면 미리 들을 수 있어요
               </p>
             </div>
-          )}
 
-          <div className="border-t border-black/10" />
-
-          {/* Sound Options */}
-          <div>
-            <h3 className="text-xs text-black/40 tracking-wider mb-3">SOUND</h3>
-            <div className="space-y-2">
-              {(["Bell", "Soft Tone", "Mute"] as const).map((option) => (
-                <button
-                  key={option}
-                  onClick={() => handlePreview(option)}
-                  className={`hand-drawn-border w-full px-4 py-3 text-left transition-colors ${
-                    sound === option
-                      ? "bg-black text-white"
-                      : "bg-white hover:bg-black/5"
-                  }`}
-                >
-                  {option}
-                </button>
-              ))}
-            </div>
-            <p
-              className="text-xs text-black/30 mt-2"
-              style={{ fontFamily: "'Nanum Pen Script', cursive" }}
+            {/* Save */}
+            <button
+              onClick={handleSave}
+              className="hand-drawn-border bg-black text-white w-full px-8 py-4 hover:bg-black/90 transition-colors mt-6"
             >
-              탭하면 미리 들을 수 있어요
-            </p>
+              Save
+            </button>
           </div>
-
-          {/* Save */}
-          <button
-            onClick={handleSave}
-            className="hand-drawn-border bg-black text-white w-full px-8 py-4 hover:bg-black/90 transition-colors mt-6"
-          >
-            Save
-          </button>
         </div>
       </div>
     </div>

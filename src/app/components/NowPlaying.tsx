@@ -330,164 +330,139 @@ export function NowPlaying() {
     5;
 
   return (
-    <div className="h-full flex flex-col px-6 py-8 bg-white">
-      {/* Top Bar */}
-      <div className="flex items-center justify-between mb-12">
-        <button
-          onClick={() => {
-            navigate("/setup", {
-              state: {
-                ...session,
-                fromSession: true,
-                currentTrackIndex,
-              },
-              replace: true,
-            });
-          }}
-          className="p-2 -ml-2 hover:bg-black/5 rounded-full transition-colors"
-        >
-          <ChevronLeft className="w-6 h-6" />
-        </button>
+    <>
+      <div className="h-full flex items-center justify-center px-6 py-12">
+        <div className="relative w-full max-w-sm">
 
-        <button
-          onClick={() => setIsSettingsOpen(true)}
-          className="p-2 -mr-2 hover:bg-black/5 rounded-full transition-colors"
-        >
-          <Menu className="w-6 h-6" />
-        </button>
-      </div>
+          {/* 테두리 사진 - 고정 크기 그대로 */}
+          <img
+            src="/pomodoro_imgs/page_outline.webp"
+            alt="card border"
+            className="w-full h-auto scale-x-[1.1] scale-y-[1.2] origin-top"
+          />
 
-      <div className="flex-1 flex flex-col items-center justify-center mb-8">
-        <div className="text-xs text-black/40 tracking-wider mb-6">NOW PLAYING</div>
-
-        {currentTrack && (
-          <h2 className="text-2xl mb-12">
-            {currentTrack.title} — {currentTrack.type}
-          </h2>
-        )}
-
-        <div className="font-light mb-12 tabular-nums tracking-tight font-numbers"
-          style={{ fontFamily: 'system-ui, -apple-system, sans-serif', fontSize: '4rem' }}>
-          {formatTime(timeRemaining)}
-        </div>
-
-        {/* Progress */}
-        {currentTrack && (
-          <div className="w-full mb-12">
-            <div className="flex items-center justify-between text-xs text-black/40 mb-2 tabular-nums">
-              <span>0:00</span>
-              <span>{formatTimeShort(currentTrack.duration)}</span>
+          {/* 내용 전체 컨테이너 */}
+          <div
+            className="absolute inset-x-0 top-0 flex flex-col"
+            style={{ height: "110%", zoom: 0.85 }}
+          >
+            {/* Top Bar - 고정 (스크롤 밖) */}
+            <div className="flex items-center justify-between px-8 pt-8 pb-4 flex-shrink-0">
+              <button onClick={() => navigate("/setup", { state: { ...session, fromSession: true, currentTrackIndex }, replace: true })}
+                className="p-2 -ml-2 hover:bg-black/5 rounded-full transition-colors">
+                <ChevronLeft className="w-6 h-6" />
+              </button>
+              <div className="text-xs text-black/40 tracking-wider center">NOW PLAYING</div>
+              <button onClick={() => setIsSettingsOpen(true)} className="p-2 -mr-2 hover:bg-black/5 rounded-full transition-colors">
+                <Menu className="w-6 h-6" />
+              </button>
             </div>
 
-            <div className="relative">
-              <div className="hand-drawn-border bg-white h-2" />
-              <div
-                className="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-black rounded-full"
-                style={{ left: `calc(${progressPercent}% - 8px)` }}
-              />
+            {/* 스크롤 영역 */}
+            <div className="flex-1 overflow-y-auto px-8 pb-8">
+              {/* Now Playing */}
+              <div className="flex flex-col items-center mb-8">
+                {currentTrack && (
+                  <h2 className="text-2xl mb-12">{currentTrack.title} — {currentTrack.type}</h2>
+                )}
+
+                <div
+                  className="font-light mb-12 tabular-nums tracking-tight"
+                  style={{ fontFamily: "system-ui, -apple-system, sans-serif", fontSize: "4rem" }}
+                >
+                  {formatTime(timeRemaining)}
+                </div>
+
+                {currentTrack && (
+                  <div className="w-full mb-12">
+                    <div className="flex items-center justify-between text-xs text-black/40 mb-2 tabular-nums">
+                      <span>0:00</span>
+                      <span>{formatTimeShort(currentTrack.duration)}</span>
+                    </div>
+                    <div className="relative">
+                      <img src="/pomodoro_imgs/line.webp" alt="progress bar" className="w-full h-2 object-fill" />
+                      <img
+                        src="/pomodoro_imgs/dot.webp"
+                        alt="progress dot"
+                        className="absolute top-1/2 -translate-y-1/2 w-4 h-4 object-contain"
+                        style={{ left: `calc(${progressPercent}% - 8px)` }}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex items-center justify-center gap-8">
+                  <button onClick={() => setIsAddTrackOpen(true)} className="p-2 hover:bg-black/5 rounded-full transition-colors">
+                    <Plus className="w-5 h-5" />
+                  </button>
+                  {/* 이전 */}
+                  <button onClick={handlePrevious} disabled={currentTrackIndex === 0}
+                    className="p-2 hover:bg-black/5 rounded-full transition-colors disabled:opacity-30 object-contain flex-shrink-0">
+                    <img src="/pomodoro_imgs/previous.webp" alt="skip back" className="w-5 h-5" />
+                  </button>
+
+                  {/* Play / Pause */}
+                  <button onClick={handlePlayPause} className="text-white p-4 transition-colors object-contain flex-shrink-0">
+                    {isPlaying
+                      ? <img src="/pomodoro_imgs/pause.webp" alt="pause" className="w-5 h-5" />
+                      : <img src="/pomodoro_imgs/play.webp" alt="play" className="w-5 h-5" />
+                    }
+                  </button>
+
+                  {/* 다음 */}
+                  <button onClick={handleNext} disabled={currentTrackIndex === tracks.length - 1 && !isLooping}
+                    className="p-2 hover:bg-black/5 rounded-full transition-colors disabled:opacity-30 object-contain flex-shrink-0">
+                    <img src="/pomodoro_imgs/next.webp" alt="skip forward" className="w-5 h-5" />
+                  </button>
+                  <button onClick={() => setIsLooping((v) => !v)}
+                    className={`p-2 hover:bg-black/5 rounded-full transition-colors ${isLooping ?  "opacity-100" : "opacity-40"}`}>
+                    <Repeat className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Up Next */}
+              <div className="border-t border-black/10 pt-6 pb-8">
+                <h3 className="text-xs text-black/40 tracking-wider mb-4">UP NEXT</h3>
+                <div className="space-y-3">
+                  {tracks.map((track, index) => (
+                    <div key={track.id}
+                      className={`flex items-center justify-between py-2 ${index === currentTrackIndex ? "opacity-100" : "opacity-60"}`}>
+                      <div className="flex items-center gap-3">
+                        {track.completed ? (
+                          <Check className="w-4 h-4 text-black" />
+                        ) : (
+                          index === currentTrackIndex ? (
+                            <img src="/pomodoro_imgs/headset.webp" alt="now playing" className="w-4 h-4 object-contain scale-[1.5]" />
+                          ) : (
+                            <div className="w-2 h-2 bg-black rounded-full scale-[0.5]" />
+                          )
+                        )}
+                        <span className="text-sm">{track.title} — {track.type}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
             </div>
           </div>
-        )}
-
-        <div className="flex items-center justify-center gap-8 mb-2">
-          {/* Add Track */}
-          <button
-            onClick={() => setIsAddTrackOpen(true)}
-            className="p-2 hover:bg-black/5 rounded-full transition-colors"
-          >
-            <Plus className="w-5 h-5" />
-          </button>
-
-          {/* Previous */}
-          <button
-            onClick={handlePrevious}
-            disabled={currentTrackIndex === 0}
-            className="p-2 hover:bg-black/5 rounded-full transition-colors disabled:opacity-30"
-          >
-            <SkipBack className="w-6 h-6" />
-          </button>
-
-          {/* Play / Pause */}
-          <button
-            onClick={handlePlayPause}
-            className="hand-drawn-border bg-black text-white p-4 hover:bg-black/90 transition-colors"
-          >
-            {isPlaying ? (
-              <Pause className="w-6 h-6" fill="white" />
-            ) : (
-              <Play className="w-6 h-6" fill="white" />
-            )}
-          </button>
-
-          {/* Next */}
-          <button
-            onClick={handleNext}
-            disabled={currentTrackIndex === tracks.length - 1 && !isLooping}
-            className="p-2 hover:bg-black/5 rounded-full transition-colors disabled:opacity-30"
-          >
-            <SkipForward className="w-6 h-6" />
-          </button>
-
-          {/* Loop */}
-          <button
-            onClick={() => setIsLooping((v) => !v)}
-            className={`p-2 hover:bg-black/5 rounded-full transition-colors ${
-              isLooping ? "bg-black text-white" : "text-black/40"
-            }`}
-          >
-            <Repeat className="w-5 h-5" />
-          </button>
         </div>
       </div>
-
-      {/* Up Next */}
-      <div className="border-t border-black/10 pt-6">
-        <h3 className="text-xs text-black/40 tracking-wider mb-4">UP NEXT</h3>
-        <div className="space-y-3 max-h-48 overflow-y-auto">
-          {tracks.map((track, index) => (
-            <div
-              key={track.id}
-              className={`flex items-center justify-between py-2 ${
-                index === currentTrackIndex ? "opacity-100" : "opacity-60"
-              }`}
-            >
-              <div className="flex items-center gap-3">
-                {track.completed ? (
-                  <Check className="w-4 h-4 text-black" />
-                ) : index === currentTrackIndex ? (
-                  <div className="w-2 h-2 bg-black rounded-full" />
-                ) : (
-                  <div className="w-4 h-4" />
-                )}
-                <span className="text-sm">
-                  {track.title} — {track.type}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* ✅ Settings Modal — onSave로 설정값 받기 */}
-      <SettingsModal
-        isOpen={isSettingsOpen}
-        onClose={() => setIsSettingsOpen(false)}
-        initialSettings={settings}
-        onSave={(newSettings) => setSettings(newSettings)}
-      />
-
-      {/* Add Track Modal */}
-      <AddTrackModal
-        isOpen={isAddTrackOpen}
-        onClose={() => setIsAddTrackOpen(false)}
-        minFocus={1}
-        minBreak={Math.max(1, baseBreak)}
-        minLongBreak={Math.max(1, baseLongBreak)}
-        onAdd={(payload) => {
-          handleAddTrack(payload);
-          setIsAddTrackOpen(false);
-        }}
-      />
-    </div>
+        <SettingsModal
+          isOpen={isSettingsOpen}
+          onClose={() => setIsSettingsOpen(false)}
+          initialSettings={settings}
+          onSave={(newSettings) => setSettings(newSettings)}
+        />
+        <AddTrackModal
+          isOpen={isAddTrackOpen}
+          onClose={() => setIsAddTrackOpen(false)}
+          minFocus={1}
+          minBreak={Math.max(1, baseBreak)}
+          minLongBreak={Math.max(1, baseLongBreak)}
+          onAdd={(payload) => { handleAddTrack(payload); setIsAddTrackOpen(false); }}
+        />
+      </>  
   );
 }

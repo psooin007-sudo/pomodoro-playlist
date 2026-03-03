@@ -102,147 +102,107 @@ export function MixSetup() {
   };
 
   return (
-    <div className="h-full flex flex-col px-6 py-8">
-      {/* Hidden SVG filter for hand-drawn effect */}
-      <svg id="hand-drawn-svg" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <filter id="hand-drawn-filter">
-            <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" result="noise" />
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.5" xChannelSelector="R" yChannelSelector="G" />
-          </filter>
-        </defs>
-      </svg>
+    <div className="h-full flex items-center justify-center px-6 py-12">
+      <div className="relative w-full max-w-sm">
 
-      {/* Header */}
-      <div className="flex items-center mb-8">
-        <button
-          onClick={() => navigate(-1)}
-          className="p-2 -ml-2 hover:bg-black/5 rounded-full transition-colors"
+        {/* 테두리 사진 - 원본 크기 그대로 */}
+        <img
+          src="/pomodoro_imgs/page_outline.webp"
+          alt="card border"
+          className="w-full h-auto scale-x-[1.1] scale-y-[1.2] origin-top"
+        />
+
+        {/* 내용 - 사진 안에 딱 맞게 */}
+        <div 
+        className="absolute inset-0 flex flex-col px-6 py-8"
+        style={{ height: "120%" }}
         >
-          <ChevronLeft className="w-6 h-6" />
-        </button>
-        <h1 className="flex-1 text-center -ml-10 pointer-events-none">Setup</h1>
-      </div>
 
-      {/* Selected Playlist Card */}
-      <div className="hand-drawn-border bg-white px-6 py-4 mb-8 flex items-center justify-between">
-        <span className="text-black">{playlist?.name || "Unknown"}</span>
-        {playlist?.duration && <span className="text-black/40 text-sm">{playlist.duration}</span>}
-      </div>
+          <svg id="hand-drawn-svg" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="hand-drawn-filter">
+                <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" result="noise" />
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.5" xChannelSelector="R" yChannelSelector="G" />
+              </filter>
+            </defs>
+          </svg>
 
-      {/* Controls Section */}
-      <div className="flex-1 space-y-6">
-        {/* Custom Mix Inputs - Show only for Custom Mix */}
-        {isCustomMix && (
-          <div className="space-y-4">
-            <div>
-              <label className="block mb-2 text-sm text-black/60">Work minutes</label>
-              <input
-                type="text"
-                inputMode="numeric"
-                pattern="[0-9]*"
-                value={workMinutes}
-                onChange={(e) => setWorkMinutes(digitsOnly(e.target.value))}
-                onBlur={normalizeWork}
-                className="hand-drawn-border bg-white w-full px-4 py-3 outline-none focus:bg-black/5 transition-colors"
-                placeholder="25"
-              />
-            </div>
-
-            <div>
-              <label className="block mb-2 text-sm text-black/60">Break minutes</label>
-              <input
-                type="text"
-                inputMode="numeric"
-                pattern="[0-9]*"
-                value={breakMinutes}
-                onChange={(e) => setBreakMinutes(digitsOnly(e.target.value))}
-                onBlur={normalizeBreak}
-                className="hand-drawn-border bg-white w-full px-4 py-3 outline-none focus:bg-black/5 transition-colors"
-                placeholder="5"
-              />
-            </div>
+          <div className="flex items-center mb-8">
+            <button onClick={() => navigate(-1)} className="p-2 -ml-2 hover:bg-black/5 rounded-full transition-colors">
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+            <h1 className="flex-1 text-center -ml-10 pointer-events-none">Setup</h1>
           </div>
-        )}
 
-        {/* Focus Count Selector (keep as buttons) */}
-        <div>
-          <label className="block mb-3 text-sm text-black/60">Focus count</label>
-          <div className="grid grid-cols-4 gap-2">
-            {focusOptions.map((count) => (
-              <button
-                key={count}
-                onClick={() => setFocusCount(count)}
-                className={`hand-drawn-border py-3 transition-colors ${
-                  focusCount === count ? "bg-black text-white" : "bg-white hover:bg-black/5"
-                }`}
-              >
-                {count}
+          <div className="hand-drawn-border bg-white px-6 py-4 mb-8 flex items-center justify-between">
+            <span className="text-black">{playlist?.name || "Unknown"}</span>
+            {playlist?.duration && <span className="text-black/40 text-sm">{playlist.duration}</span>}
+          </div>
+
+          <div className="flex-1 space-y-6 overflow-y-auto">
+            {isCustomMix && (
+              <div className="space-y-4">
+                <div>
+                  <label className="block mb-2 text-sm text-black/60">Work minutes</label>
+                  <input type="text" inputMode="numeric" pattern="[0-9]*" value={workMinutes}
+                    onChange={(e) => setWorkMinutes(digitsOnly(e.target.value))} onBlur={normalizeWork}
+                    className="hand-drawn-border bg-white w-full px-4 py-3 outline-none focus:bg-black/5 transition-colors" placeholder="25" />
+                </div>
+                <div>
+                  <label className="block mb-2 text-sm text-black/60">Break minutes</label>
+                  <input type="text" inputMode="numeric" pattern="[0-9]*" value={breakMinutes}
+                    onChange={(e) => setBreakMinutes(digitsOnly(e.target.value))} onBlur={normalizeBreak}
+                    className="hand-drawn-border bg-white w-full px-4 py-3 outline-none focus:bg-black/5 transition-colors" placeholder="5" />
+                </div>
+              </div>
+            )}
+
+            <div>
+              <label className="block mb-3 text-sm text-black/60">Focus count</label>
+              <div className="grid grid-cols-4 gap-2">
+                {focusOptions.map((count) => (
+                  <button key={count} onClick={() => setFocusCount(count)}
+                    className={`hand-drawn-border py-3 transition-colors ${focusCount === count ? "bg-black text-white" : "bg-white hover:bg-black/5"}`}>
+                    {count}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between py-2">
+              <label className="text-sm text-black/60">Include Long Break</label>
+              <button onClick={() => setIncludeLongBreak(!includeLongBreak)}
+                className={`hand-drawn-border w-14 h-8 relative transition-colors ${includeLongBreak ? "bg-black" : "bg-white"}`}>
+                <div className={`absolute top-1 w-5 h-5 bg-white transition-all ${includeLongBreak ? "right-1" : "left-1"}`} />
               </button>
-            ))}
-          </div>
-        </div>
+            </div>
 
-        {/* Include Long Break Toggle */}
-        <div className="flex items-center justify-between py-2">
-          <label className="text-sm text-black/60">Include Long Break</label>
+            {includeLongBreak && (
+              <div>
+                <label className="block mb-2 text-sm text-black/60">Long break minutes</label>
+                <input type="text" inputMode="numeric" pattern="[0-9]*" value={longBreakMinutes}
+                  onChange={(e) => setLongBreakMinutes(digitsOnly(e.target.value))} onBlur={normalizeLongBreak}
+                  className="hand-drawn-border bg-white w-full px-4 py-3 outline-none focus:bg-black/5 transition-colors" placeholder="15" />
+              </div>
+            )}
+          </div>
+
           <button
-            onClick={() => setIncludeLongBreak(!includeLongBreak)}
-            className={`hand-drawn-border w-14 h-8 relative transition-colors ${
-              includeLongBreak ? "bg-black" : "bg-white"
-            }`}
+            onClick={() => {
+              if (playlist?.name) localStorage.setItem("lastPlayedPlaylist", playlist.name);
+              const finalWork = clampInt(Number(workMinutes || "1"), 1, 120);
+              const finalBreak = clampInt(Number(breakMinutes || "1"), 1, 60);
+              const breakMin = clampInt(Number(breakMinutes || "1"), 1, 60);
+              const finalLong = clampInt(Number(longBreakMinutes || breakMin), breakMin, 60);
+              navigate("/session", { state: { playlist, focusCount, includeLongBreak, workMinutes: finalWork, breakMinutes: finalBreak, longBreakMinutes: finalLong, isCustomMix } });
+            }}
+            className="hand-drawn-border bg-black text-white px-8 py-4 hover:bg-black/90 transition-colors mt-8"
           >
-            <div className={`absolute top-1 w-5 h-5 bg-white transition-all ${includeLongBreak ? "right-1" : "left-1"}`} />
+            Start Session
           </button>
+
         </div>
-
-        {/* Long Break Minutes Input */}
-        {includeLongBreak && (
-          <div>
-            <label className="block mb-2 text-sm text-black/60">Long break minutes</label>
-            <input
-              type="text"
-              inputMode="numeric"
-              pattern="[0-9]*"
-              value={longBreakMinutes}
-              onChange={(e) => setLongBreakMinutes(digitsOnly(e.target.value))}
-              onBlur={normalizeLongBreak}
-              className="hand-drawn-border bg-white w-full px-4 py-3 outline-none focus:bg-black/5 transition-colors"
-              placeholder="15"
-            />
-          </div>
-        )}
       </div>
-
-      {/* Start Session Button */}
-      <button
-        onClick={() => {
-          if (playlist?.name) {
-            localStorage.setItem("lastPlayedPlaylist", playlist.name);
-          }
-
-          // normalize one last time before sending
-          const finalWork = clampInt(Number(workMinutes || "1"), 1, 120);
-          const finalBreak = clampInt(Number(breakMinutes || "1"), 1, 60);
-          const breakMin = clampInt(Number(breakMinutes || "1"), 1, 60);
-          const finalLong = clampInt(Number(longBreakMinutes || breakMin), breakMin, 60);
-
-          navigate("/session", {
-            state: {
-              playlist,
-              focusCount,
-              includeLongBreak,
-              workMinutes: finalWork,
-              breakMinutes: finalBreak,
-              longBreakMinutes: finalLong,
-              isCustomMix,
-            },
-          });
-        }}
-        className="hand-drawn-border bg-black text-white px-8 py-4 hover:bg-black/90 transition-colors mt-8"
-      >
-        Start Session
-      </button>
     </div>
   );
 }

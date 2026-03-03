@@ -25,42 +25,75 @@ export function PlaylistSelect() {
   };
 
   return (
-    <div className="h-full flex flex-col px-6 py-12">
-      {/* Hidden SVG filter for hand-drawn effect */}
-      <svg id="hand-drawn-svg" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <filter id="hand-drawn-filter">
-            <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" result="noise" />
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.5" xChannelSelector="R" yChannelSelector="G" />
-          </filter>
-        </defs>
-      </svg>
+  <div className="h-full flex items-center justify-center px-6 py-12">
+    <div className="relative w-full max-w-sm">
+      
+      {/* 바깥 테두리 이미지 - 세로로 1.2배 늘림 */}
+      <img
+        src="/pomodoro_imgs/page_outline.webp"
+        alt="card border"
+        className="w-full h-auto scale-x-[1.1] scale-y-[1.2] origin-top"
+      />
 
-      {/* Title */}
-      <h1 className="mb-8 text-center">Your Playlists</h1>
+      {/* 내용은 이미지 위에 absolute로 올리기 */}
+      {/* scale-y-[1.2] 적용된 실제 높이에 맞게 top/bottom 조정 */}
+      <div
+        className="absolute inset-x-0 top-0 px-6 flex flex-col"
+        style={{ height: "120%" }} // scale-y-[1.2]에 맞춰 높이 보정
+      >
+        {/* SVG filter */}
+        <svg id="hand-drawn-svg" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="hand-drawn-filter">
+              <feTurbulence
+                type="fractalNoise"
+                baseFrequency="0.05"
+                numOctaves="2"
+                result="noise"
+              />
+              <feDisplacementMap
+                in="SourceGraphic"
+                in2="noise"
+                scale="1.5"
+                xChannelSelector="R"
+                yChannelSelector="G"
+              />
+            </filter>
+          </defs>
+        </svg>
 
-      {/* Playlist Cards */}
-      <div className="hand-drawn-border bg-white mb-8 flex-1 max-h-[400px]">
-        {playlists.map((playlist, index) => (
-          <div key={playlist.name}>
-            <button
-              className="w-full px-6 py-5 text-left flex items-center justify-between hover:bg-black/5 transition-colors"
-              onClick={() => navigate("/setup", { state: { playlist } })}
-            >
-              <span className="text-black">{playlist.name}</span>
-              {playlist.duration && (
-                <span className="text-black/40 text-sm">{playlist.duration}</span>
-              )}
-            </button>
-            {index < playlists.length - 1 && <div className="h-[1px] bg-black/10 mx-6" />}
+        {/* 내용 영역 - 상하 패딩으로 이미지 테두리 안쪽에 맞춤 */}
+        <div className="flex flex-col flex-1 py-12">
+          {/* Title */}
+          <h1 className="mb-8 text-center">Your Playlists</h1>
+
+          {/* Playlist Cards */}
+          <div className="mb-8 flex-1 overflow-y-auto">
+            {playlists.map((playlist, index) => (
+              <div key={playlist.name}>
+                <button
+                  className="w-full px-6 py-5 text-left flex items-center justify-between hover:bg-black/5 transition-colors"
+                  onClick={() => handleSelect(playlist)}
+                >
+                  <span className="text-black">{playlist.name}</span>
+                  {playlist.duration && (
+                    <span className="text-black/40 text-sm">{playlist.duration}</span>
+                  )}
+                </button>
+                {index < playlists.length - 1 && (
+                  <div className="h-[1px] bg-black/10 mx-6" />
+                )}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
 
-      {/* Last Played Text */}
-      <p className="text-sm text-black/40 text-center">
-        Last played: {lastPlayed ?? "None yet"}
-      </p>
+          {/* Last Played */}
+          <p className="text-sm text-black/40 text-center">
+            Last played: {lastPlayed ?? "None yet"}
+          </p>
+        </div>
+      </div>
     </div>
+  </div>
   );
 }

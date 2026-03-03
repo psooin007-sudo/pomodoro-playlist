@@ -67,85 +67,91 @@ export function AddTrackModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
-      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-start justify-center pt-12 bg-white/80 backdrop-blur-md"
     >
       <div
-        className="bg-white w-full max-w-[390px] rounded-2xl p-6 shadow-xl"
-        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-[300px]"
       >
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl">Add Track</h2>
+        <img
+          src="/pomodoro_imgs/page_outline.webp"
+          alt="modal border"
+          className="w-full h-auto scale-x-[1.1] scale-y-[1.2] origin-top translate-y-[5%]"
+        />
+
+        <div
+          className="absolute inset-x-0 top-0 flex flex-col px-6 py-15"
+          style={{ height: "120%", zoom: 0.75 }} 
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl">Add Track</h2>
+            <button onClick={onClose} className="p-2 -mr-2 hover:bg-black/5 rounded-full transition-colors">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* Type */}
+          <div className="mb-6">
+            <div className="text-xs text-black/40 tracking-wider mb-3">TYPE</div>
+            <div className="grid grid-cols-3 gap-2">
+              {(["Focus", "Break", "Long Break"] as const).map((opt) => (
+                <button
+                  key={opt}
+                  onClick={() => setType(opt)}
+                  className={`hand-drawn-border px-3 py-3 text-sm transition-colors ${
+                    type === opt ? "bg-black text-white" : "bg-white hover:bg-black/5"
+                  }`}
+                >
+                  {opt}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Minutes */}
+          <div className="mb-6">
+            <div className="text-xs text-black/40 tracking-wider mb-3">MINUTES</div>
+            <input
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              value={minutes}
+              onChange={(e) => setMinutes(digitsOnly(e.target.value))}
+              onBlur={normalizeMinutes}
+              className="hand-drawn-border bg-white w-full px-4 py-3 outline-none focus:bg-black/5 transition-colors"
+              placeholder={String(minByType)}
+            />
+            <div className="mt-2 text-xs text-black/40">
+              Min: {minByType} • Max: {maxMinutes}
+            </div>
+          </div>
+
+          {/* Insert where */}
+          <div className="mb-8">
+            <div className="text-xs text-black/40 tracking-wider mb-3">INSERT</div>
+            <div className="grid grid-cols-2 gap-2">
+              {(["Next", "End of Cycle"] as const).map((opt) => (
+                <button
+                  key={opt}
+                  onClick={() => setInsertWhere(opt)}
+                  className={`hand-drawn-border px-3 py-3 text-sm transition-colors ${
+                    insertWhere === opt ? "bg-black text-white" : "bg-white hover:bg-black/5"
+                  }`}
+                >
+                  {opt}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Add Button */}
           <button
-            onClick={onClose}
-            className="p-2 -mr-2 hover:bg-black/5 rounded-full transition-colors"
+            onClick={handleAdd}
+            className="hand-drawn-border bg-black text-white w-full px-8 py-4 hover:bg-black/90 transition-colors"
           >
-            <X className="w-5 h-5" />
+            Add
           </button>
         </div>
-
-        {/* Type */}
-        <div className="mb-6">
-          <div className="text-xs text-black/40 tracking-wider mb-3">TYPE</div>
-          <div className="grid grid-cols-3 gap-2">
-            {(["Focus", "Break", "Long Break"] as const).map((opt) => (
-              <button
-                key={opt}
-                onClick={() => setType(opt)}
-                className={`hand-drawn-border px-3 py-3 text-sm transition-colors ${
-                  type === opt ? "bg-black text-white" : "bg-white hover:bg-black/5"
-                }`}
-              >
-                {opt}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Minutes */}
-        <div className="mb-6">
-          <div className="text-xs text-black/40 tracking-wider mb-3">MINUTES</div>
-          <input
-            type="text"
-            inputMode="numeric"
-            pattern="[0-9]*"
-            value={minutes}
-            onChange={(e) => setMinutes(digitsOnly(e.target.value))}
-            onBlur={normalizeMinutes}
-            className="hand-drawn-border bg-white w-full px-4 py-3 outline-none focus:bg-black/5 transition-colors"
-            placeholder={String(minByType)}
-          />
-          <div className="mt-2 text-xs text-black/40">
-            Min: {minByType} • Max: {maxMinutes}
-          </div>
-        </div>
-
-        {/* Insert where */}
-        <div className="mb-8">
-          <div className="text-xs text-black/40 tracking-wider mb-3">INSERT</div>
-          <div className="grid grid-cols-2 gap-2">
-            {(["Next", "End of Cycle"] as const).map((opt) => (
-              <button
-                key={opt}
-                onClick={() => setInsertWhere(opt)}
-                className={`hand-drawn-border px-3 py-3 text-sm transition-colors ${
-                  insertWhere === opt ? "bg-black text-white" : "bg-white hover:bg-black/5"
-                }`}
-              >
-                {opt}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Actions */}
-        <button
-          onClick={handleAdd}
-          className="hand-drawn-border bg-black text-white w-full px-8 py-4 hover:bg-black/90 transition-colors"
-        >
-          Add
-        </button>
       </div>
     </div>
   );
