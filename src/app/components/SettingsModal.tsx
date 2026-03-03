@@ -134,7 +134,7 @@ export function SettingsModal({
 
         {/* 내용 */}
         <div
-          className="absolute inset-x-0 top-0 flex flex-col px-6 py-15"
+          className="absolute inset-x-0 top-0 flex flex-col px-6 py-15 overflow-y-auto"
           style={{ height: "120%", zoom: 0.75 }}
         >
           {/* Header */}
