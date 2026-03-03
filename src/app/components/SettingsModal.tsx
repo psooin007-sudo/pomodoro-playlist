@@ -184,7 +184,7 @@ export function SettingsModal({
                 ))}
               </div>
               <p className="text-xs text-black/30 mt-2" style={{ fontFamily: "'Nanum Pen Script', cursive" }}>
-                탭하면 미리 들을 수 있어요
+                탭하면 미리 들을 수 있어요 / 무음모드면 소리가 안 날 수 있어요
               </p>
             </div>
 
