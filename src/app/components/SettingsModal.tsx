@@ -134,7 +134,7 @@ export function SettingsModal({
 
         {/* 내용 */}
         <div
-          className="absolute inset-x-0 top-0 flex flex-col px-6 py-15 overflow-y-auto"
+          className="absolute inset-x-0 top-0 flex flex-col px-6 py-15"
           style={{ height: "120%", zoom: 0.75 }}
         >
           {/* Header */}
@@ -145,7 +145,7 @@ export function SettingsModal({
             </button>
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-6 overflow-y-auto">
             {/* Auto Start Next Track */}
             <div className="flex items-center justify-between py-2">
               <label className="text-sm text-black/80">Auto Start Next Track</label>
