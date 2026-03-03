@@ -458,9 +458,7 @@ export function NowPlaying() {
         <AddTrackModal
           isOpen={isAddTrackOpen}
           onClose={() => setIsAddTrackOpen(false)}
-          minFocus={1}
-          minBreak={Math.max(1, baseBreak)}
-          minLongBreak={Math.max(1, baseLongBreak)}
+          maxMinutes={Math.max(1, session?.workMinutes ?? preset?.work ?? 25)}
           onAdd={(payload) => { handleAddTrack(payload); setIsAddTrackOpen(false); }}
         />
       </>  
